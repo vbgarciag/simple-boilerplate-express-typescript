@@ -1,0 +1,10 @@
+1. Create a Node JS Express server
+2. Create user endpoints to perform the following actions:
+  - GET ALL: return a list of all users
+  - GET BY ID: return a user object or null
+  - CREATE: create a new user
+  - UPDATE: update user data of an existing user
+  - REMOVE: remove an existing user from the user data
+  - You should use the UserRepository placed in `./data-access/inMemory/repositories/UserRepository` which contains all methods needed
+3. Validate the request input for each endpoint to ensure all data incoming is the correct
+4. Add a new function to the UserRepository that creates a new user if it doesn't exist or returns it if it does exist
