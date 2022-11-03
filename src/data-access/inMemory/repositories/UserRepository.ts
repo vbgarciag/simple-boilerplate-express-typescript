@@ -14,13 +14,14 @@ export type UserAttributes = {
 export type UserCreationAttributes = Omit<UserAttributes, 'id' | 'password' | 'created_at' | 'updated_at'>;
 
 class UserRepository extends BaseRepository<UserCreationAttributes, UserAttributes> {
-  async checkOrCreateUser(id: string, user: UserCreationAttributes): Promise<UserAttributes | null> {
-    const search = await this.findById(id);
-    if (!search) {
-      return search;
+  async checkOrCreateUser(user: UserCreationAttributes) {
+    const items = await this.findAll();
+    const search = items.find((item: any) => item.email === user.email) || null;
+    if (search == null) {
+      const created = await this.create(user);
+      return created;
     }
-    const created = await this.create(user);
-    return created;
+    return search;
   }
 }
 

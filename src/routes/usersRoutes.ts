@@ -37,21 +37,21 @@ router.post("/",
 
                 return res.status(400).json({ errors: errors.array() });
             }
-            console.log("no error");
             const data: UserCreationAttributes = req.body;
             const user = await UserRepository.create(data);
             return res.json(user);
         } catch (error) {
             return res.status(400);
         }
-    })
+    }
+)
 
 router.put("/:id",
     body("first_name").isString(),
     body("last_name").isString(),
     body("email").isEmail(),
     body("password").isString(),
-    body("is_active").isBoolean(), 
+    body("is_active").isBoolean(),
     async (req: Request, res: Response): Promise<Response> => {
         try {
             const errors = validationResult(req);
@@ -77,5 +77,36 @@ router.delete("/:id", async (req: Request, res: Response): Promise<Response> => 
         return res.status(400);
     }
 })
+
+router.delete("/:id", async (req: Request, res: Response): Promise<Response> => {
+    try {
+        const id = req.params.id;
+        const user = await UserRepository.delete(id);
+        return res.json(user);
+    } catch (error) {
+        return res.status(400);
+    }
+})
+
+router.post("/checkOrCreateUser",
+    body("first_name").isString(),
+    body("last_name").isString(),
+    body("email").isEmail(),
+    body("password").isString(),
+    body("is_active").isBoolean(),
+    async (req: Request, res: Response): Promise<Response> => {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ errors: errors.array() });
+            }
+            const data: UserCreationAttributes = req.body;
+            const user = await UserRepository.checkOrCreateUser(data);
+            return res.json(user);
+        } catch (error) {
+            return res.status(400);
+        }
+    }
+)
 
 export default router;
