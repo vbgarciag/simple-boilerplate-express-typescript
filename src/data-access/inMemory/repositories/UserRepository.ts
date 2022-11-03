@@ -13,6 +13,15 @@ export type UserAttributes = {
 
 export type UserCreationAttributes = Omit<UserAttributes, 'id' | 'password' | 'created_at' | 'updated_at'>;
 
-class UserRepository extends BaseRepository<UserCreationAttributes, UserAttributes> {}
+class UserRepository extends BaseRepository<UserCreationAttributes, UserAttributes> {
+  async checkOrCreateUser(id: string, user: UserCreationAttributes): Promise<UserAttributes | null> {
+    const search = await this.findById(id);
+    if (!search) {
+      return search;
+    }
+    const created = await this.create(user);
+    return created;
+  }
+}
 
 export default new UserRepository();
